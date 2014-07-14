@@ -453,7 +453,7 @@ void Master::remove_expired_sessions() {
                  "by %lu milliseconds", (Lu)lease_credit);
         for (SessionMap::iterator iter = m_session_map.begin();
              iter != m_session_map.end(); iter++)
-          (*iter).second->extend_lease((uint32_t)lease_credit);
+          (*iter).second->extend_lease((uint32_t)lease_credit+m_lease_interval);
       }
     }
   } // end extend expiry in case of suspension
