@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright (C) 2007-2012 Hypertable, Inc.
+# Copyright (C) 2007-2014 Hypertable, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,58 +50,54 @@ DISTRO=
 if [ -e $HYPERTABLE_HOME/conf/hadoop-distro ]; then
   DISTRO=`cat $HYPERTABLE_HOME/conf/hadoop-distro`
 fi
-HT_JAR=`ls -1 $HYPERTABLE_HOME/lib/java/*.jar | grep "hypertable-[^-]*.jar" | awk 'BEGIN {FS="/"} {print $NF}'`
-if [ -z "$HT_JAR" ] || [ -z "$DISTRO" ]; then
-    if [ -z "$DISTRO" ]; then
-      echo "No Hadoop distro is configured.  Run the following script to"
-      echo "configure:"
-      echo ""
-      echo "$HYPERTABLE_HOME/bin/set-hadoop-distro.sh"
-      exit 1
-    fi
-    $HYPERTABLE_HOME/bin/set-hadoop-distro.sh $DISTRO
-else
-    diff $HYPERTABLE_HOME/lib/java/$HT_JAR $HYPERTABLE_HOME/lib/java/$DISTRO/$HT_JAR > /dev/null
-    if [ $? -ne 0 ]; then
-        $HYPERTABLE_HOME/bin/set-hadoop-distro.sh $DISTRO        
-    fi
-fi
 
-# for developers, add Hadoop classes to CLASSPATH
-if [ -d "$HYPERTABLE_HOME/build/classes" ]; then
-  CLASSPATH=${CLASSPATH}:$HYPERTABLE_HOME/build/classes
-fi
-if [ -d "$HYPERTABLE_HOME/build/webapps" ]; then
-  CLASSPATH=${CLASSPATH}:$HYPERTABLE_HOME/build
-fi
-if [ -d "$HYPERTABLE_HOME/build/test/classes" ]; then
-  CLASSPATH=${CLASSPATH}:$HYPERTABLE_HOME/build/test/classes
+if [ -z "$DISTRO" ]; then
+    echo "No Hadoop distro is configured.  Run the following script to"
+    echo "configure:"
+    echo ""
+    echo "$HYPERTABLE_HOME/bin/set-hadoop-distro.sh"
+    exit 1
 fi
 
 # so that filenames w/ spaces are handled correctly in loops below
 IFS=
 
-# for releases, add core hadoop jar & webapps to CLASSPATH
-if [ -d "$HYPERTABLE_HOME/webapps" ]; then
-  CLASSPATH=${CLASSPATH}:$HYPERTABLE_HOME
+declare -a HADOOP1_DISTROS=('apache1' 'cdh3' 'hdp1');
+declare -a HADOOP2_DISTROS=('apache2' 'cdh4' 'hdp2');
+
+HADOOP_VERSION=
+for d in ${HADOOP1_DISTROS[@]}; do
+    if [ $DISTRO == $d ]; then
+        HADOOP_VERSION=1
+        break;
+    fi
+done
+
+if [ -z "$HADOOP_VERSION" ]; then
+    for d in ${HADOOP2_DISTROS[@]}; do
+        if [ $DISTRO == $d ]; then
+            HADOOP_VERSION=2
+            break;
+        fi
+    done
 fi
 
-# add thrift to classpath
-for f in $HYPERTABLE_HOME/lib/java/libthrift*.jar; do
-  CLASSPATH=${CLASSPATH}:$f;
-done
+if [ -z "$HADOOP_VERSION" ]; then
+    echo "Unrecognized distro:  $DISTRO"
+    exit 1
+fi
 
 # add lib/java to CLASSPATH
 for f in $HYPERTABLE_HOME/lib/java/*.jar; do
   CLASSPATH=${CLASSPATH}:$f;
 done
 
-for f in $HYPERTABLE_HOME/lib/jetty-ext/*.jar; do
+# Add lib/java/hadoop# to CLASSPATH
+for f in $HYPERTABLE_HOME/lib/java/hadoop${HADOOP_VERSION}/*.jar; do
   CLASSPATH=${CLASSPATH}:$f;
 done
 
 unset IFS
-
 
 #
 # run it

@@ -2,7 +2,7 @@
 
 export HT_HOME=$(cd `dirname "$0"`/.. && pwd)
 
-declare -a Distros=('cdh3' 'cdh4');
+declare -a Distros=('apache1' 'apache2' 'cdh3' 'cdh4' 'hdp1' 'hdp2');
 
 usage() {
   echo ""
@@ -37,23 +37,6 @@ if [ -z $DISTRO ]; then
     exit 1;
 fi
 
-
-# Remove existing distro files
-for distro in ${Distros[@]}; do
-
-    if [ ! -d $HT_HOME/lib/java/$distro ]; then
-        echo "$HT_HOME/lib/java/$distro does not exist, exiting..."
-        exit 1
-    fi
-
-    cd $HT_HOME/lib/java/$distro
-    for jar in `ls -1`; do
-        \rm -f $HT_HOME/lib/java/$jar
-    done 
-
-done
-
-\cp -f $HT_HOME/lib/java/$DISTRO/* $HT_HOME/lib/java
 
 echo $DISTRO > $HT_HOME/conf/hadoop-distro
 

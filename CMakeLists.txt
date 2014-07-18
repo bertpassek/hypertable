@@ -260,6 +260,11 @@ add_subdirectory(examples)
 add_subdirectory(contrib)
 add_subdirectory(tests/integration)
 
+# Maven Repository
+if (NOT MAVEN_REPOSITORY)
+   SET (MAVEN_REPOSITORY "~/.m2/repository")
+endif ()
+
 # Java stuff
 if (NOT SKIP_JAVA_BUILD)
   include(JavaHelper)
@@ -274,8 +279,8 @@ install(FILES ${CONFS} DESTINATION conf)
 install(PROGRAMS ${HYPERTABLE_BINARY_DIR}/ht DESTINATION bin)
 
 # common jars
-file(GLOB JARS lib/*.jar lib/*.txt)
-install(FILES ${JARS} DESTINATION lib/java)
+#file(GLOB JARS lib/*.jar lib/*.txt)
+#install(FILES ${JARS} DESTINATION lib/java)
 
 # cdh3 jars
 file(GLOB JARS lib/cdh3/*.jar)
@@ -284,10 +289,10 @@ install(FILES ${HYPERTABLE_BINARY_DIR}/java/cdh3/hypertable-${VERSION}.jar
           DESTINATION lib/java/cdh3 OPTIONAL)
 
 # cdh4 jars
-file(GLOB JARS lib/cdh4/*.jar)
-install(FILES ${JARS} DESTINATION lib/java/cdh4)
-install(FILES ${HYPERTABLE_BINARY_DIR}/java/cdh4/hypertable-${VERSION}.jar
-          DESTINATION lib/java/cdh4 OPTIONAL)
+#file(GLOB JARS lib/cdh4/*.jar)
+#install(FILES ${JARS} DESTINATION lib/java/cdh4)
+#install(FILES ${HYPERTABLE_BINARY_DIR}/java/cdh4/hypertable-${VERSION}.jar
+#          DESTINATION lib/java/cdh4 OPTIONAL)
 
 install(PROGRAMS bin/jrun DESTINATION bin)
 
