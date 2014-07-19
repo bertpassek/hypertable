@@ -27,6 +27,10 @@ file(COPY java DESTINATION ${HYPERTABLE_BINARY_DIR} PATTERN pom.xml.in EXCLUDE)
 # Top-level pom.xml
 configure_file(${HYPERTABLE_SOURCE_DIR}/java/pom.xml.in ${HYPERTABLE_BINARY_DIR}/java/pom.xml @ONLY)
 
+# runtime-dependencies/pom.xml
+configure_file(${HYPERTABLE_SOURCE_DIR}/java/runtime-dependencies/pom.xml.in
+         ${HYPERTABLE_BINARY_DIR}/java/runtime-dependencies/pom.xml @ONLY)
+
 # runtime-dependencies/common/pom.xml
 configure_file(${HYPERTABLE_SOURCE_DIR}/java/runtime-dependencies/common/pom.xml.in
          ${HYPERTABLE_BINARY_DIR}/java/runtime-dependencies/common/pom.xml @ONLY)
@@ -50,6 +54,10 @@ configure_file(${HYPERTABLE_SOURCE_DIR}/java/runtime-dependencies/cdh4/pom.xml.i
 # hypertable-common/pom.xml
 configure_file(${HYPERTABLE_SOURCE_DIR}/java/hypertable-common/pom.xml.in
          ${HYPERTABLE_BINARY_DIR}/java/hypertable-common/pom.xml @ONLY)
+
+# hypertable/pom.xml
+configure_file(${HYPERTABLE_SOURCE_DIR}/java/hypertable/pom.xml.in
+         ${HYPERTABLE_BINARY_DIR}/java/hypertable/pom.xml @ONLY)
 
 # hypertable-hadoop1/pom.xml
 configure_file(${HYPERTABLE_SOURCE_DIR}/java/hypertable-hadoop1/pom.xml.in
@@ -109,11 +117,21 @@ if (Thrift_FOUND)
 endif ()
 
 
-add_custom_target(HypertableJars ALL mvn -f java/pom.xml -Dmaven.test.skip=true package
+add_custom_target(HypertableHadoop1Jars ALL mvn -f java/pom.xml -Dmaven.test.skip=true -Phadoop1 package
                   DEPENDS ${ThriftGenJava_SRCS})
 
+add_custom_target(CleanBuild ALL rm -rf ${HYPERTABLE_BINARY_DIR}/java/hypertable-common/target/classes
+                  COMMAND rm -rf ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/classes
+                  DEPENDS HypertableHadoop1Jars)
+
+add_custom_target(HypertableHadoop2Jars ALL mvn -f java/pom.xml -Dmaven.test.skip=true -Phadoop2 package
+                  DEPENDS CleanBuild)
+
+add_custom_target(RuntimeDependencies ALL mvn -f java/runtime-dependencies/pom.xml -Dmaven.test.skip=true package
+                  DEPENDS HypertableHadoop2Jars)
+
 add_custom_target(java)
-add_dependencies(java HypertableJars)
+add_dependencies(java RuntimeDependencies)
 
 
 # Common jars
@@ -139,8 +157,10 @@ install(FILES ${MAVEN_REPOSITORY}/log4j/log4j/1.2.17/log4j-1.2.17.jar
 # Apache Hadoop 1 jars
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-core/${APACHE1_VERSION}/hadoop-core-${APACHE1_VERSION}.jar
               DESTINATION lib/java/apache1)
-install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable-hadoop1/target/hypertable-hadoop1-${VERSION}-bundled.jar
-              DESTINATION lib/java/apache1 RENAME hypertable-hadoop1-${VERSION}.jar)
+install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable/target/hypertable-${VERSION}-hadoop1.jar
+              DESTINATION lib/java/apache1)
+install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/hypertable-examples-${VERSION}-hadoop1.jar
+              DESTINATION lib/java/apache1)
 
 # Apache Hadoop 2 jars
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-annotations/${APACHE2_VERSION}/hadoop-annotations-${APACHE2_VERSION}.jar
@@ -153,8 +173,10 @@ install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-hdfs/${APACHE2_VERSIO
               DESTINATION lib/java/apache2)
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-mapreduce-client-core/${APACHE2_VERSION}/hadoop-mapreduce-client-core-${APACHE2_VERSION}.jar
               DESTINATION lib/java/apache2)
-install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable-hadoop2/target/hypertable-hadoop2-${VERSION}-bundled.jar
-              DESTINATION lib/java/apache2 RENAME hypertable-hadoop2-${VERSION}.jar)
+install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable/target/hypertable-${VERSION}-hadoop2.jar
+              DESTINATION lib/java/apache2)
+install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/hypertable-examples-${VERSION}-hadoop2.jar
+              DESTINATION lib/java/apache2)
 
 # CDH3 jars
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-core/${CDH3_VERSION}/hadoop-core-${CDH3_VERSION}.jar
@@ -173,7 +195,3 @@ install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-mapreduce-client-core
               DESTINATION lib/java/cdh4)
 install(FILES ${MAVEN_REPOSITORY}/com/google/protobuf/protobuf-java/2.4.0a/protobuf-java-2.4.0a.jar
               DESTINATION lib/java/cdh4)
-
-# Examples jar
-install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/hypertable-examples-${VERSION}.jar
-              DESTINATION lib/java/common)
