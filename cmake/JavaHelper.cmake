@@ -143,6 +143,8 @@ install(FILES ${MAVEN_REPOSITORY}/commons-collections/commons-collections/3.2.1/
               DESTINATION lib/java/common)
 install(FILES ${MAVEN_REPOSITORY}/commons-configuration/commons-configuration/1.6/commons-configuration-1.6.jar
               DESTINATION lib/java/common)
+install(FILES ${MAVEN_REPOSITORY}/commons-io/commons-io/2.1/commons-io-2.1.jar
+              DESTINATION lib/java/common)
 install(FILES ${MAVEN_REPOSITORY}/commons-lang/commons-lang/2.6/commons-lang-2.6.jar
               DESTINATION lib/java/common)
 install(FILES ${MAVEN_REPOSITORY}/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar

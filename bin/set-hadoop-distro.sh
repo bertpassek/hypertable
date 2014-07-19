@@ -41,7 +41,9 @@ fi
 \cp -f $HT_HOME/lib/java/common/*.jar $HT_HOME/lib/java
 \cp -f $HT_HOME/lib/java/$DISTRO/*.jar $HT_HOME/lib/java
 
-if [ $DISTRO == "cdh4" ]; then
+if [ $DISTRO == "cdh3" ]; then
+    \cp -f $HT_HOME/lib/java/apache1/hypertable-*.jar $HT_HOME/lib/java
+elif [ $DISTRO == "cdh4" ]; then
     \cp -f $HT_HOME/lib/java/apache2/hypertable-*.jar $HT_HOME/lib/java
 fi
 
