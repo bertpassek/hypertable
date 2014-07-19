@@ -10,71 +10,29 @@
   <name>Umbrella project for Hypertable</name>
   <url>http://www.hypertable.com</url>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <modules>
+    <module>runtime-dependencies/common</module>
+    <module>runtime-dependencies/apache1</module>
+    <module>runtime-dependencies/apache2</module>
+    <module>runtime-dependencies/cdh3</module>
+    <module>runtime-dependencies/cdh4</module>
     <module>hypertable-common</module>
+    <module>hypertable-examples</module>
+    <module>hypertable-hadoop1</module>
+    <module>hypertable-hadoop2</module>
   </modules>
 
-  <profiles>
-    <profile>
-      <id>hadoop2</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>hypertable-hadoop2</module>
-        <module>runtime-dependencies</module>
-      </modules>
-      <dependencies>
-        <dependency>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-common</artifactId>
-          <version>2.4.1</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-auth</artifactId>
-          <version>2.4.1</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-mapreduce-client-core</artifactId>
-          <version>2.4.1</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-hdfs</artifactId>
-          <version>2.4.1</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-annotations</artifactId>
-          <version>2.4.1</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.thrift</groupId>
-          <artifactId>libthrift</artifactId>
-          <version>0.9.2</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.pig</groupId>
-          <artifactId>pig</artifactId>
-          <version>0.13.0</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-          <version>4.3.1</version>
-          <scope>test</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.3.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
 </project>

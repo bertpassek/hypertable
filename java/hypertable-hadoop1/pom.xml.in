@@ -8,10 +8,10 @@
     <version>@VERSION@</version>
   </parent>
 
-  <artifactId>hypertable-hadoop2</artifactId>
+  <artifactId>hypertable-hadoop1</artifactId>
   <packaging>jar</packaging>
 
-  <name>Hypertable Hadoop 2</name>
+  <name>Hypertable Hadoop 1</name>
 
   <dependencies>
     <dependency>
@@ -21,32 +21,8 @@
     </dependency>
     <dependency>
       <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-common</artifactId>
-      <version>2.4.1</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-auth</artifactId>
-      <version>2.4.1</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-mapreduce-client-core</artifactId>
-      <version>2.4.1</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-hdfs</artifactId>
-      <version>2.4.1</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-annotations</artifactId>
-      <version>2.4.1</version>
+      <artifactId>hadoop-core</artifactId>
+      <version>1.2.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

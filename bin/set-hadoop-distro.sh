@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 export HT_HOME=$(cd `dirname "$0"`/.. && pwd)
 
@@ -37,6 +37,13 @@ if [ -z $DISTRO ]; then
     exit 1;
 fi
 
+\rm -f $HT_HOME/lib/java/*.jar
+\cp -f $HT_HOME/lib/java/common/*.jar $HT_HOME/lib/java
+\cp -f $HT_HOME/lib/java/$DISTRO/*.jar $HT_HOME/lib/java
+
+if [ $DISTRO == "cdh4" ]; then
+    \cp -f $HT_HOME/lib/java/apache2/hypertable-hadoop2-*.jar $HT_HOME/lib/java
+fi
 
 echo $DISTRO > $HT_HOME/conf/hadoop-distro
 

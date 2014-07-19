@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # Copyright (C) 2007-2014 Hypertable, Inc.
 #
@@ -62,38 +62,37 @@ fi
 # so that filenames w/ spaces are handled correctly in loops below
 IFS=
 
-declare -a HADOOP1_DISTROS=('apache1' 'cdh3' 'hdp1');
-declare -a HADOOP2_DISTROS=('apache2' 'cdh4' 'hdp2');
-
-HADOOP_VERSION=
-for d in ${HADOOP1_DISTROS[@]}; do
-    if [ $DISTRO == $d ]; then
-        HADOOP_VERSION=1
-        break;
-    fi
-done
-
-if [ -z "$HADOOP_VERSION" ]; then
-    for d in ${HADOOP2_DISTROS[@]}; do
-        if [ $DISTRO == $d ]; then
-            HADOOP_VERSION=2
-            break;
+DISTRO_NEEDS_SETTING=0
+JAR_COUNT=`ls -1 $HYPERTABLE_HOME/lib/java/*.jar | wc -l`
+if [ $JAR_COUNT -eq 0 ]; then
+    DISTRO_NEEDS_SETTING=1
+else
+    JAR=`ls -1 $HYPERTABLE_HOME/lib/java/*.jar | head -1`
+    SYSTEM=`uname -s`
+    if [ $SYSTEM == "Linux" ]; then
+        CONF_DATE=`stat -t -c '%Y' $HYPERTABLE_HOME/conf/hadoop-distro`
+        JAR_DATE=`stat -t -c '%Y' $JAR`
+        if [[ $CONF_DATE > $JAR_DATE ]]; then
+            DISTRO_NEEDS_SETTING=1
         fi
-    done
+    elif [ $SYSTEM == "Darwin" ]; then
+        CONF_DATE=`stat -f '%B' $HYPERTABLE_HOME/conf/hadoop-distro`
+        JAR_DATE=`stat -f '%B' $JAR`
+        if [[ $CONF_DATE > $JAR_DATE ]]; then
+            DISTRO_NEEDS_SETTING=1
+        fi
+    else
+        DISTRO_NEEDS_SETTING=1
+    fi
 fi
 
-if [ -z "$HADOOP_VERSION" ]; then
-    echo "Unrecognized distro:  $DISTRO"
-    exit 1
+if [ $DISTRO_NEEDS_SETTING -eq 1 ]; then
+    $HYPERTABLE_HOME/bin/set-hadoop-distro.sh $DISTRO
 fi
+
 
 # add lib/java to CLASSPATH
 for f in $HYPERTABLE_HOME/lib/java/*.jar; do
-  CLASSPATH=${CLASSPATH}:$f;
-done
-
-# Add lib/java/hadoop# to CLASSPATH
-for f in $HYPERTABLE_HOME/lib/java/hadoop${HADOOP_VERSION}/*.jar; do
   CLASSPATH=${CLASSPATH}:$f;
 done
 

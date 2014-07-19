@@ -35,8 +35,7 @@ import org.hypertable.AsyncComm.DispatchHandler;
 import org.hypertable.AsyncComm.ReactorFactory;
 import org.hypertable.Common.System;
 import org.hypertable.Common.Usage;
-
-
+import org.hypertable.FsBroker.Lib.ConnectionHandler;
 
 public class main {
 

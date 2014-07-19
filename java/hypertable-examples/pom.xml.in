@@ -8,17 +8,16 @@
     <version>@VERSION@</version>
   </parent>
 
-  <artifactId>hypertable-common</artifactId>
+  <artifactId>hypertable-examples</artifactId>
   <packaging>jar</packaging>
 
-  <name>Hypertable Common</name>
+  <name>Hypertable Examples</name>
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-core</artifactId>
-      <version>1.2.1</version>
-      <scope>provided</scope>
+      <groupId>org.hypertable</groupId>
+      <artifactId>hypertable-common</artifactId>
+      <version>@VERSION@</version>
     </dependency>
     <dependency>
       <groupId>org.apache.thrift</groupId>
@@ -27,11 +26,10 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.pig</groupId>
-      <artifactId>pig</artifactId>
-      <version>0.13.0</version>
-      <scope>provided</scope>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-client</artifactId>
+      <version>0.98.3-hadoop2</version>
     </dependency>
-  </dependencies>
+  </dependencies>  
 
 </project>
