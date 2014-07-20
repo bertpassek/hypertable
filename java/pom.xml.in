@@ -30,12 +30,36 @@
 
   <profiles>
     <profile>
-      <id>hadoop1</id>
+      <id>cdh3</id>
       <properties>
-        <hadoop.version>hadoop1</hadoop.version>
+        <hadoop.version>cdh3</hadoop.version>
       </properties>
       <modules>
-        <module>hypertable-hadoop1</module>
+        <module>hypertable-cdh3</module>
+        <module>hypertable</module>
+      </modules>
+      <repositories>
+        <repository>
+          <id>cloudera</id>
+          <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+        </repository>
+      </repositories>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-core</artifactId>
+          <version>0.20.2-cdh3u5</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>apache1</id>
+      <properties>
+        <hadoop.version>apache1</hadoop.version>
+      </properties>
+      <modules>
+        <module>hypertable-apache1</module>
         <module>hypertable</module>
       </modules>
       <dependencies>
@@ -48,12 +72,12 @@
       </dependencies>
     </profile>
     <profile>
-      <id>hadoop2</id>
+      <id>apache2</id>
       <properties>
-        <hadoop.version>hadoop2</hadoop.version>
+        <hadoop.version>apache2</hadoop.version>
       </properties>
       <modules>
-        <module>hypertable-hadoop2</module>
+        <module>hypertable-apache2</module>
         <module>hypertable</module>
       </modules>
       <dependencies>

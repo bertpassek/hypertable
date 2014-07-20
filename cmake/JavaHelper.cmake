@@ -59,13 +59,17 @@ configure_file(${HYPERTABLE_SOURCE_DIR}/java/hypertable-common/pom.xml.in
 configure_file(${HYPERTABLE_SOURCE_DIR}/java/hypertable/pom.xml.in
          ${HYPERTABLE_BINARY_DIR}/java/hypertable/pom.xml @ONLY)
 
-# hypertable-hadoop1/pom.xml
-configure_file(${HYPERTABLE_SOURCE_DIR}/java/hypertable-hadoop1/pom.xml.in
-         ${HYPERTABLE_BINARY_DIR}/java/hypertable-hadoop1/pom.xml @ONLY)
+# hypertable-cdh3/pom.xml
+configure_file(${HYPERTABLE_SOURCE_DIR}/java/hypertable-cdh3/pom.xml.in
+         ${HYPERTABLE_BINARY_DIR}/java/hypertable-cdh3/pom.xml @ONLY)
 
-# hypertable-hadoop2/pom.xml
-configure_file(${HYPERTABLE_SOURCE_DIR}/java/hypertable-hadoop2/pom.xml.in
-         ${HYPERTABLE_BINARY_DIR}/java/hypertable-hadoop2/pom.xml @ONLY)
+# hypertable-apache1/pom.xml
+configure_file(${HYPERTABLE_SOURCE_DIR}/java/hypertable-apache1/pom.xml.in
+         ${HYPERTABLE_BINARY_DIR}/java/hypertable-apache1/pom.xml @ONLY)
+
+# hypertable-apache2/pom.xml
+configure_file(${HYPERTABLE_SOURCE_DIR}/java/hypertable-apache2/pom.xml.in
+         ${HYPERTABLE_BINARY_DIR}/java/hypertable-apache2/pom.xml @ONLY)
 
 # hypertable-examples/pom.xml
 configure_file(${HYPERTABLE_SOURCE_DIR}/java/hypertable-examples/pom.xml.in
@@ -117,18 +121,25 @@ if (Thrift_FOUND)
 endif ()
 
 
-add_custom_target(HypertableHadoop1Jars ALL mvn -f java/pom.xml -Dmaven.test.skip=true -Phadoop1 package
+add_custom_target(HypertableHadoopCDH3 ALL mvn -f java/pom.xml -Dmaven.test.skip=true -Pcdh3 package
                   DEPENDS ${ThriftGenJava_SRCS})
 
-add_custom_target(CleanBuild ALL rm -rf ${HYPERTABLE_BINARY_DIR}/java/hypertable-common/target/classes
+add_custom_target(CleanBuild0 ALL rm -rf ${HYPERTABLE_BINARY_DIR}/java/hypertable-common/target/classes
                   COMMAND rm -rf ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/classes
-                  DEPENDS HypertableHadoop1Jars)
+                  DEPENDS HypertableHadoopCDH3)
 
-add_custom_target(HypertableHadoop2Jars ALL mvn -f java/pom.xml -Dmaven.test.skip=true -Phadoop2 package
-                  DEPENDS CleanBuild)
+add_custom_target(HypertableHadoopApache1 ALL mvn -f java/pom.xml -Dmaven.test.skip=true -Papache1 package
+                  DEPENDS CleanBuild0)
+
+add_custom_target(CleanBuild1 ALL rm -rf ${HYPERTABLE_BINARY_DIR}/java/hypertable-common/target/classes
+                  COMMAND rm -rf ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/classes
+                  DEPENDS HypertableHadoopApache1)
+
+add_custom_target(HypertableHadoopApache2 ALL mvn -f java/pom.xml -Dmaven.test.skip=true -Papache2 package
+                  DEPENDS CleanBuild1)
 
 add_custom_target(RuntimeDependencies ALL mvn -f java/runtime-dependencies/pom.xml -Dmaven.test.skip=true package
-                  DEPENDS HypertableHadoop2Jars)
+                  DEPENDS HypertableHadoopApache2)
 
 add_custom_target(java)
 add_dependencies(java RuntimeDependencies)
@@ -151,17 +162,17 @@ install(FILES ${MAVEN_REPOSITORY}/commons-logging/commons-logging/1.1.1/commons-
               DESTINATION lib/java/common)
 install(FILES ${MAVEN_REPOSITORY}/log4j/log4j/1.2.17/log4j-1.2.17.jar
               DESTINATION lib/java/common)
+install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar
+              DESTINATION lib/java/common)
+install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-log4j12/1.7.5/slf4j-log4j12-1.7.5.jar
+              DESTINATION lib/java/common)
 
 # Apache Hadoop 1 jars
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-core/${APACHE1_VERSION}/hadoop-core-${APACHE1_VERSION}.jar
               DESTINATION lib/java/apache1)
-install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable/target/hypertable-${VERSION}-hadoop1.jar
+install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable/target/hypertable-${VERSION}-apache1.jar
               DESTINATION lib/java/apache1)
-install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/hypertable-examples-${VERSION}-hadoop1.jar
-              DESTINATION lib/java/apache1)
-install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-api/1.4.3/slf4j-api-1.4.3.jar
-              DESTINATION lib/java/apache1)
-install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-log4j12/1.4.3/slf4j-log4j12-1.4.3.jar
+install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/hypertable-examples-${VERSION}-apache1.jar
               DESTINATION lib/java/apache1)
 
 # Apache Hadoop 2 jars
@@ -175,17 +186,17 @@ install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-hdfs/${APACHE2_VERSIO
               DESTINATION lib/java/apache2)
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-mapreduce-client-core/${APACHE2_VERSION}/hadoop-mapreduce-client-core-${APACHE2_VERSION}.jar
               DESTINATION lib/java/apache2)
-install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable/target/hypertable-${VERSION}-hadoop2.jar
+install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable/target/hypertable-${VERSION}-apache2.jar
               DESTINATION lib/java/apache2)
-install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/hypertable-examples-${VERSION}-hadoop2.jar
-              DESTINATION lib/java/apache2)
-install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar
-              DESTINATION lib/java/apache2)
-install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-log4j12/1.7.5/slf4j-log4j12-1.7.5.jar
+install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/hypertable-examples-${VERSION}-apache2.jar
               DESTINATION lib/java/apache2)
 
 # CDH3 jars
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-core/${CDH3_VERSION}/hadoop-core-${CDH3_VERSION}.jar
+              DESTINATION lib/java/cdh3)
+install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable/target/hypertable-${VERSION}-cdh3.jar
+              DESTINATION lib/java/cdh3)
+install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/hypertable-examples-${VERSION}-cdh3.jar
               DESTINATION lib/java/cdh3)
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/thirdparty/guava/guava/r09-jarjar/guava-r09-jarjar.jar
               DESTINATION lib/java/cdh3)

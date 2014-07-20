@@ -41,11 +41,7 @@ fi
 \cp -f $HT_HOME/lib/java/common/*.jar $HT_HOME/lib/java
 \cp -f $HT_HOME/lib/java/$DISTRO/*.jar $HT_HOME/lib/java
 
-if [ $DISTRO == "cdh3" ]; then
-    for f in `ls -1 $HT_HOME/lib/java/apache1/*.jar | grep -v hadoop-`; do
-        \cp -f $f $HT_HOME/lib/java
-    done
-elif [ $DISTRO == "cdh4" ]; then
+if [ $DISTRO == "cdh4" ]; then
     for f in `ls -1 $HT_HOME/lib/java/apache2/*.jar | grep -v hadoop-`; do
         \cp -f $f $HT_HOME/lib/java
     done

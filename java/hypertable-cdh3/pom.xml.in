@@ -8,20 +8,20 @@
     <version>@VERSION@</version>
   </parent>
 
-  <artifactId>hypertable-hadoop2</artifactId>
+  <artifactId>hypertable-cdh3</artifactId>
   <packaging>jar</packaging>
 
-  <name>Hypertable Hadoop 2</name>
+  <name>Hypertable Hadoop CDH3</name>
 
   <profiles>
     <profile>
-      <id>hadoop2</id>
+      <id>cdh3</id>
       <dependencies>
         <dependency>
           <groupId>org.hypertable</groupId>
           <artifactId>hypertable-common</artifactId>
           <version>@VERSION@</version>
-          <classifier>hadoop2</classifier>
+          <classifier>cdh3</classifier>
         </dependency>
       </dependencies>
     </profile>

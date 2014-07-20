@@ -8,20 +8,20 @@
     <version>@VERSION@</version>
   </parent>
 
-  <artifactId>hypertable-hadoop1</artifactId>
+  <artifactId>hypertable-apache1</artifactId>
   <packaging>jar</packaging>
 
-  <name>Hypertable Hadoop 1</name>
+  <name>Hypertable Apache Hadoop 1</name>
 
   <profiles>
     <profile>
-      <id>hadoop1</id>
+      <id>apache1</id>
       <dependencies>
         <dependency>
           <groupId>org.hypertable</groupId>
           <artifactId>hypertable-common</artifactId>
           <version>@VERSION@</version>
-          <classifier>hadoop1</classifier>
+          <classifier>apache1</classifier>
         </dependency>
       </dependencies>
     </profile>
