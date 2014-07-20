@@ -42,9 +42,13 @@ fi
 \cp -f $HT_HOME/lib/java/$DISTRO/*.jar $HT_HOME/lib/java
 
 if [ $DISTRO == "cdh3" ]; then
-    \cp -f $HT_HOME/lib/java/apache1/hypertable-*.jar $HT_HOME/lib/java
+    for f in `ls -1 $HT_HOME/lib/java/apache1/*.jar | grep -v hadoop-`; do
+        \cp -f $f $HT_HOME/lib/java
+    done
 elif [ $DISTRO == "cdh4" ]; then
-    \cp -f $HT_HOME/lib/java/apache2/hypertable-*.jar $HT_HOME/lib/java
+    for f in `ls -1 $HT_HOME/lib/java/apache2/*.jar | grep -v hadoop-`; do
+        \cp -f $f $HT_HOME/lib/java
+    done
 fi
 
 echo $DISTRO > $HT_HOME/conf/hadoop-distro

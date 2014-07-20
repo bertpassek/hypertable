@@ -149,10 +149,6 @@ install(FILES ${MAVEN_REPOSITORY}/commons-lang/commons-lang/2.6/commons-lang-2.6
               DESTINATION lib/java/common)
 install(FILES ${MAVEN_REPOSITORY}/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar
               DESTINATION lib/java/common)
-install(FILES ${MAVEN_REPOSITORY}/com/google/guava/guava/11.0.2/guava-11.0.2.jar
-              DESTINATION lib/java/common)
-install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar
-              DESTINATION lib/java/common)
 install(FILES ${MAVEN_REPOSITORY}/log4j/log4j/1.2.17/log4j-1.2.17.jar
               DESTINATION lib/java/common)
 
@@ -162,6 +158,10 @@ install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-core/${APACHE1_VERSIO
 install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable/target/hypertable-${VERSION}-hadoop1.jar
               DESTINATION lib/java/apache1)
 install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/hypertable-examples-${VERSION}-hadoop1.jar
+              DESTINATION lib/java/apache1)
+install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-api/1.4.3/slf4j-api-1.4.3.jar
+              DESTINATION lib/java/apache1)
+install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-log4j12/1.4.3/slf4j-log4j12-1.4.3.jar
               DESTINATION lib/java/apache1)
 
 # Apache Hadoop 2 jars
@@ -179,9 +179,15 @@ install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable/target/hypertable-${VERSI
               DESTINATION lib/java/apache2)
 install(FILES ${HYPERTABLE_BINARY_DIR}/java/hypertable-examples/target/hypertable-examples-${VERSION}-hadoop2.jar
               DESTINATION lib/java/apache2)
+install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar
+              DESTINATION lib/java/apache2)
+install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-log4j12/1.7.5/slf4j-log4j12-1.7.5.jar
+              DESTINATION lib/java/apache2)
 
 # CDH3 jars
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-core/${CDH3_VERSION}/hadoop-core-${CDH3_VERSION}.jar
+              DESTINATION lib/java/cdh3)
+install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/thirdparty/guava/guava/r09-jarjar/guava-r09-jarjar.jar
               DESTINATION lib/java/cdh3)
 
 # CDH4 jars
@@ -196,4 +202,6 @@ install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-hdfs/${CDH4_VERSION}/
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-mapreduce-client-core/${CDH4_VERSION}/hadoop-mapreduce-client-core-${CDH4_VERSION}.jar
               DESTINATION lib/java/cdh4)
 install(FILES ${MAVEN_REPOSITORY}/com/google/protobuf/protobuf-java/2.4.0a/protobuf-java-2.4.0a.jar
+              DESTINATION lib/java/cdh4)
+install(FILES ${MAVEN_REPOSITORY}/com/google/guava/guava/11.0.2/guava-11.0.2.jar
               DESTINATION lib/java/cdh4)

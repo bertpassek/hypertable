@@ -22,6 +22,11 @@
       <artifactId>hadoop-core</artifactId>
       <version>@CDH3_VERSION@</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop.thirdparty.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>r09-jarjar</version>
+    </dependency>
   </dependencies>
 
 </project>
