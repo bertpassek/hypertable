@@ -2,7 +2,7 @@
 
 export HT_HOME=$(cd `dirname "$0"`/.. && pwd)
 
-declare -a Distros=('apache1' 'apache2' 'cdh3' 'cdh4' 'hdp1' 'hdp2');
+declare -a Distros=('apache1' 'apache2' 'cdh3' 'cdh4' 'hdp2');
 
 usage() {
   echo ""
@@ -42,9 +42,16 @@ fi
 \cp -f $HT_HOME/lib/java/$DISTRO/*.jar $HT_HOME/lib/java
 
 if [ $DISTRO == "cdh4" ]; then
-    for f in `ls -1 $HT_HOME/lib/java/apache2/*.jar | grep -v hadoop-`; do
-        \cp -f $f $HT_HOME/lib/java
-    done
+    \cp $HT_HOME/lib/java/apache2/hypertable-*.jar $HT_HOME/lib/java
+    \cp $HT_HOME/lib/java/specific/guava-11.0.2.jar $HT_HOME/lib/java
+    \cp $HT_HOME/lib/java/specific/protobuf-java-2.4.0a.jar $HT_HOME/lib/java
+elif [ $DISTRO == "hdp2" ]; then
+    \cp $HT_HOME/lib/java/apache2/*.jar $HT_HOME/lib/java
+    \cp $HT_HOME/lib/java/specific/guava-11.0.2.jar $HT_HOME/lib/java
+    \cp $HT_HOME/lib/java/specific/protobuf-java-2.5.0.jar $HT_HOME/lib/java
+elif [ $DISTRO == "apache2" ]; then
+    \cp $HT_HOME/lib/java/specific/guava-11.0.2.jar $HT_HOME/lib/java
+    \cp $HT_HOME/lib/java/specific/protobuf-java-2.5.0.jar $HT_HOME/lib/java
 fi
 
 echo $DISTRO > $HT_HOME/conf/hadoop-distro

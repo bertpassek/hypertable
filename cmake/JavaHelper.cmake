@@ -35,6 +35,10 @@ configure_file(${HYPERTABLE_SOURCE_DIR}/java/runtime-dependencies/pom.xml.in
 configure_file(${HYPERTABLE_SOURCE_DIR}/java/runtime-dependencies/common/pom.xml.in
          ${HYPERTABLE_BINARY_DIR}/java/runtime-dependencies/common/pom.xml @ONLY)
 
+# runtime-dependencies/specific/pom.xml
+configure_file(${HYPERTABLE_SOURCE_DIR}/java/runtime-dependencies/specific/pom.xml.in
+         ${HYPERTABLE_BINARY_DIR}/java/runtime-dependencies/specific/pom.xml @ONLY)
+
 # runtime-dependencies/apache1/pom.xml
 configure_file(${HYPERTABLE_SOURCE_DIR}/java/runtime-dependencies/apache1/pom.xml.in
          ${HYPERTABLE_BINARY_DIR}/java/runtime-dependencies/apache1/pom.xml @ONLY)
@@ -167,6 +171,14 @@ install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar
 install(FILES ${MAVEN_REPOSITORY}/org/slf4j/slf4j-log4j12/1.7.5/slf4j-log4j12-1.7.5.jar
               DESTINATION lib/java/common)
 
+# Distro specific jars
+install(FILES ${MAVEN_REPOSITORY}/com/google/protobuf/protobuf-java/2.4.0a/protobuf-java-2.4.0a.jar
+              DESTINATION lib/java/specific)
+install(FILES ${MAVEN_REPOSITORY}/com/google/protobuf/protobuf-java/2.5.0/protobuf-java-2.5.0.jar
+              DESTINATION lib/java/specific)
+install(FILES ${MAVEN_REPOSITORY}/com/google/guava/guava/11.0.2/guava-11.0.2.jar
+              DESTINATION lib/java/specific)
+
 # Apache Hadoop 1 jars
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-core/${APACHE1_VERSION}/hadoop-core-${APACHE1_VERSION}.jar
               DESTINATION lib/java/apache1)
@@ -211,8 +223,4 @@ install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-common/${CDH4_VERSION
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-hdfs/${CDH4_VERSION}/hadoop-hdfs-${CDH4_VERSION}.jar
              DESTINATION lib/java/cdh4)
 install(FILES ${MAVEN_REPOSITORY}/org/apache/hadoop/hadoop-mapreduce-client-core/${CDH4_VERSION}/hadoop-mapreduce-client-core-${CDH4_VERSION}.jar
-              DESTINATION lib/java/cdh4)
-install(FILES ${MAVEN_REPOSITORY}/com/google/protobuf/protobuf-java/2.4.0a/protobuf-java-2.4.0a.jar
-              DESTINATION lib/java/cdh4)
-install(FILES ${MAVEN_REPOSITORY}/com/google/guava/guava/11.0.2/guava-11.0.2.jar
               DESTINATION lib/java/cdh4)
