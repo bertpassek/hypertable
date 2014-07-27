@@ -27,7 +27,6 @@ public class Properties {
 
   public static final String HYPERTABLE_COLUMNS_MAPPING = "hypertable.columns.mapping";
   public static final String HYPERTABLE_KEY_COL = ":key";
-  public static final String HYPERTABLE_NAMESPACE = "hypertable.table.namespace";
   public static final String HYPERTABLE_PUT_TIMESTAMP = "hypertable.put.timestamp";
   public static final String HYPERTABLE_TABLE_DEFAULT_STORAGE_TYPE = "hypertable.table.default.storage.type";
   public static final String HYPERTABLE_TABLE_NAME = "hypertable.table.name";

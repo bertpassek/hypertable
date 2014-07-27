@@ -76,14 +76,13 @@ public class HypertableStorageHandler extends DefaultStorageHandler
   private Configuration mConf=null;
 
    private String getHTNamespace(Table tbl) {
-    // Give preference to TBLPROPERTIES over SERDEPROPERTIES
-    // (really we should only use TBLPROPERTIES, so this is just
-    // for backwards compatibility with the original specs).
-    String namespace = tbl.getParameters().get(org.hypertable.hadoop.hive.Properties.HYPERTABLE_NAMESPACE);
-    if (namespace == null) {
-      namespace = tbl.getSd().getSerdeInfo().getParameters().get(org.hypertable.hadoop.hive.Properties.HYPERTABLE_NAMESPACE);
-    }
-    return namespace;
+     // Give preference to TBLPROPERTIES over SERDEPROPERTIES
+     // (really we should only use TBLPROPERTIES, so this is just
+     // for backwards compatibility with the original specs).
+     String hypertableTableName = tbl.getParameters().get(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME);
+     if (hypertableTableName == null)
+       hypertableTableName = tbl.getSd().getSerdeInfo().getParameters().get(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME);
+     return Utilities.getNamespace(hypertableTableName);
   }
 
   private String getHTTableName(Table tbl) throws TTransportException, TException, ClientException {
@@ -96,14 +95,10 @@ public class HypertableStorageHandler extends DefaultStorageHandler
       mNamespaceId = mClient.open_namespace(getHTNamespace(tbl));
     }
 
-    String tableName = tbl.getParameters().get(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME);
-    if (tableName == null) {
-      tableName = tbl.getSd().getSerdeInfo().getParameters().get(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME);
-    }
-    if (tableName == null) {
-      tableName = tbl.getTableName();
-    }
-    return tableName;
+     String hypertableTableName = tbl.getParameters().get(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME);
+     if (hypertableTableName == null)
+       hypertableTableName = tbl.getSd().getSerdeInfo().getParameters().get(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME);
+     return Utilities.getTableName(hypertableTableName);
   }
 
   @Override
@@ -282,30 +277,25 @@ public class HypertableStorageHandler extends DefaultStorageHandler
     jobProperties.put(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_DEFAULT_STORAGE_TYPE,
       tableProperties.getProperty(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_DEFAULT_STORAGE_TYPE,"string"));
 
-    String namespace =
-      tableProperties.getProperty(org.hypertable.hadoop.hive.Properties.HYPERTABLE_NAMESPACE);
-    if (namespace == null) {
-      namespace = tableProperties.getProperty(hive_metastoreConstants.META_TABLE_DB);
-    }
-    jobProperties.put(org.hypertable.hadoop.hive.Properties.HYPERTABLE_NAMESPACE, namespace);
-    jobProperties.put(RowOutputFormat.NAMESPACE, namespace);
-
-    String tableName =
+    String hypertableTableName =
       tableProperties.getProperty(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME);
-    if (tableName == null) {
-      tableName =
+    if (hypertableTableName == null) {
+      hypertableTableName =
         tableProperties.getProperty(hive_metastoreConstants.META_TABLE_NAME);
-        tableName = tableName.toLowerCase();
-      if (tableName.startsWith(DEFAULT_PREFIX)) {
-        tableName = tableName.substring(DEFAULT_PREFIX.length());
+        hypertableTableName = hypertableTableName.toLowerCase();
+      if (hypertableTableName.startsWith(DEFAULT_PREFIX)) {
+        hypertableTableName = hypertableTableName.substring(DEFAULT_PREFIX.length());
       }
     }
+    String tableName = Utilities.getTableName(hypertableTableName);
     jobProperties.put(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME, tableName);
     jobProperties.put(RowOutputFormat.TABLE, tableName);
+
+    String namespace = Utilities.getNamespace(hypertableTableName);
+    jobProperties.put(RowOutputFormat.NAMESPACE, namespace);
   }
 
 
-  @Override
   public void configureJobConf(TableDesc tableDesc, JobConf jobConf) {
     try {
       HypertableSerDe.configureJobConf(tableDesc, jobConf);

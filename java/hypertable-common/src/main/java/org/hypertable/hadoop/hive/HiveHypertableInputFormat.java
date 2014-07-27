@@ -72,8 +72,8 @@ public class HiveHypertableInputFormat<K extends BytesWritable, V extends Row>
                                          Reporter reporter) throws IOException {
     HiveHypertableSplit htSplit = (HiveHypertableSplit)split;
 
-    String namespace = jobConf.get(Properties.HYPERTABLE_NAMESPACE);
-    String tableName = jobConf.get(Properties.HYPERTABLE_TABLE_NAME);
+    String namespace = Utilities.getNamespace(jobConf.get(Properties.HYPERTABLE_TABLE_NAME));
+    String tableName = Utilities.getTableName(jobConf.get(Properties.HYPERTABLE_TABLE_NAME));
     String columnsMappingSpec = jobConf.get(Properties.HYPERTABLE_COLUMNS_MAPPING);
     ColumnMappings columnMappings;
 
@@ -173,8 +173,8 @@ public class HiveHypertableInputFormat<K extends BytesWritable, V extends Row>
   @Override
   public InputSplit[] getSplits(JobConf jobConf, int numSplits) throws IOException {
 
-    String namespace = jobConf.get(Properties.HYPERTABLE_NAMESPACE);
-    String tablename = jobConf.get(Properties.HYPERTABLE_TABLE_NAME);
+    String namespace = Utilities.getNamespace(jobConf.get(Properties.HYPERTABLE_TABLE_NAME));
+    String tableName = Utilities.getTableName(jobConf.get(Properties.HYPERTABLE_TABLE_NAME));
     String columnsMappingSpec = jobConf.get(Properties.HYPERTABLE_COLUMNS_MAPPING);
 
     if (columnsMappingSpec == null) {
@@ -193,7 +193,7 @@ public class HiveHypertableInputFormat<K extends BytesWritable, V extends Row>
 
     RowInputFormat rif = new RowInputFormat();
     rif.set_namespace(namespace);
-    rif.set_table_name(tablename);
+    rif.set_table_name(tableName);
 
     ScanSpec scanSpec = new ScanSpec();
 
