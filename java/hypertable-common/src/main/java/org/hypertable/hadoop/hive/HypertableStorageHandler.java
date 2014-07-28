@@ -298,7 +298,9 @@ public class HypertableStorageHandler extends DefaultStorageHandler
 
   public void configureJobConf(TableDesc tableDesc, JobConf jobConf) {
     try {
-      HypertableSerDe.configureJobConf(tableDesc, jobConf);
+      HypertableSerDeParameters serdeParams =
+        new HypertableSerDeParameters(jobConf, tableDesc.getProperties(), HypertableSerDe.class.getName());
+      serdeParams.getKeyFactory().configureJobConf(tableDesc, jobConf);
       jobConf.set("tmpjars", getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
     } catch (Exception e) {
       throw new RuntimeException(e);

@@ -43,7 +43,6 @@ public class LazyHypertableCellMap extends LazyMap {
 
   private Row row;
   private byte [] columnFamilyBytes;
-  private byte[] qualPrefix;
   private List<Boolean> binaryStorage;
 
   /**
@@ -56,21 +55,12 @@ public class LazyHypertableCellMap extends LazyMap {
 
   public void init(
       Row r,
-      byte[] columnFamilyBytes,
-      List<Boolean> binaryStorage) {
-
-    init(r, columnFamilyBytes, binaryStorage, null);
-  }
-
-  public void init(
-      Row r,
       byte [] columnFamilyBytes,
-      List<Boolean> binaryStorage, byte[] qualPrefix) {
+      List<Boolean> binaryStorage) {
 
     row = r;
     this.columnFamilyBytes = columnFamilyBytes;
     this.binaryStorage = binaryStorage;
-    this.qualPrefix = qualPrefix;
     setParsed(false);
   }
 
@@ -88,12 +78,6 @@ public class LazyHypertableCellMap extends LazyMap {
       for (Entry<byte [], byte []> e : familyMap.entrySet()) {
         // null values and values of zero length are not added to the cachedMap
         if (e.getValue() == null || e.getValue().length == 0) {
-          continue;
-        }
-
-        if (qualPrefix != null && !startsWith(e.getKey(), qualPrefix)) {
-          // since we were provided a qualifier prefix, only accept qualifiers that start with this
-          // prefix
           continue;
         }
 
@@ -124,17 +108,6 @@ public class LazyHypertableCellMap extends LazyMap {
     }
 
     setParsed(true);
-  }
-
-  private static boolean startsWith(byte[] source, byte[] match) {
-    if (match.length > source.length)
-      return false;
-    for (int i = 0; i < match.length; i++) {
-      if (source[i] != match[i]) {
-        return false;
-      }
-    }
-    return true;
   }
 
   /**
