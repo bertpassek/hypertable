@@ -288,7 +288,7 @@ public class HypertableStorageHandler extends DefaultStorageHandler
       }
     }
     String tableName = Utilities.getTableName(hypertableTableName);
-    jobProperties.put(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME, tableName);
+    jobProperties.put(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME, hypertableTableName);
     jobProperties.put(RowOutputFormat.TABLE, tableName);
 
     String namespace = Utilities.getNamespace(hypertableTableName);

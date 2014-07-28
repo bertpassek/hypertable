@@ -62,8 +62,11 @@ public class HiveHypertableOutputFormat extends RowOutputFormat implements
   public RecordWriter getHiveRecordWriter(JobConf jc, Path finalOutPath,
       Class<? extends Writable> valueClass, boolean isCompressed,
       Properties tableProperties, Progressable progress) throws IOException {
-    String htTableName = jc.get(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME);
-    jc.set(RowOutputFormat.TABLE, htTableName);
+
+    String tableName = Utilities.getTableName(jc.get(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME));
+    String namespace = Utilities.getNamespace(jc.get(org.hypertable.hadoop.hive.Properties.HYPERTABLE_TABLE_NAME));
+    jc.set(RowOutputFormat.TABLE, tableName);
+    jc.set(RowOutputFormat.NAMESPACE, namespace);
 
     final org.apache.hadoop.mapred.RecordWriter<
       NullWritable, Row> tblWriter =
