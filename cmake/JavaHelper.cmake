@@ -35,10 +35,6 @@ configure_file(${HYPERTABLE_SOURCE_DIR}/java/runtime-dependencies/pom.xml.in
 configure_file(${HYPERTABLE_SOURCE_DIR}/java/runtime-dependencies/common/pom.xml.in
          ${HYPERTABLE_BINARY_DIR}/java/runtime-dependencies/common/pom.xml @ONLY)
 
-# runtime-dependencies/specific/pom.xml
-configure_file(${HYPERTABLE_SOURCE_DIR}/java/runtime-dependencies/specific/pom.xml.in
-         ${HYPERTABLE_BINARY_DIR}/java/runtime-dependencies/specific/pom.xml @ONLY)
-
 # runtime-dependencies/apache1/pom.xml
 configure_file(${HYPERTABLE_SOURCE_DIR}/java/runtime-dependencies/apache1/pom.xml.in
          ${HYPERTABLE_BINARY_DIR}/java/runtime-dependencies/apache1/pom.xml @ONLY)
