@@ -16,22 +16,25 @@
 # along with Hypertable. If not, see <http://www.gnu.org/licenses/>
 #
 
-# - Find Ant (a java build tool)
+# - Find Maven (a java build tool)
 # This module defines
-#  ANT_VERSION version string of ant if found
-#  ANT_FOUND, If false, do not try to use ant
+#  MAVEN_VERSION version string of maven if found
+#  MAVEN_FOUND, If false, do not try to use maven
 
-exec_program(env ARGS ant -version OUTPUT_VARIABLE ANT_VERSION
-             RETURN_VALUE ANT_RETURN)
+exec_program(env ARGS mvn -version OUTPUT_VARIABLE MAVEN_OUTPUT
+             RETURN_VALUE MAVEN_RETURN)
 
-if (ANT_RETURN STREQUAL "0")
-  set(ANT_FOUND TRUE)
-  if (NOT ANT_FIND_QUIETLY)
-    message(STATUS "Found Ant: ${ANT_VERSION}")
-  endif ()
+if (MAVEN_RETURN STREQUAL "0")
+   string(REPLACE ";" " " MAVEN_OUTPUT2 ${MAVEN_OUTPUT})
+   string(REPLACE "\n" ";" MAVEN_OUTPUT3 ${MAVEN_OUTPUT2})
+   list(GET MAVEN_OUTPUT3 0 MAVEN_VERSION)
+   set(MAVEN_FOUND TRUE)
+   if (NOT MAVEN_FIND_QUIETLY)
+      message(STATUS "Found Maven: ${MAVEN_VERSION}")
+   endif ()
 else ()
-  message(STATUS "Ant: not found")
-  set(ANT_FOUND FALSE)
+  message(STATUS "Maven: not found")
+  set(MAVEN_FOUND FALSE)
   set(SKIP_JAVA_BUILD TRUE)
 endif ()
 
